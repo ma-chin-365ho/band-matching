@@ -155,7 +155,69 @@ func webServer() {
 
     c.JSON(http.StatusOK, bands)
   })
+  r.GET("/bandusers", func(c *gin.Context) {
 
+    var band_users []Band_user
+    var band_user Band_user
+    
+    band_user = Band_user {
+      Id                    :0            ,
+      Pswd                  :"string"     ,
+      Nm                    :"string"     ,
+      Icon_id               :0            ,
+      Part                  :"string"     ,
+      Hope_to_join_flg      :0            ,
+      Like_genre            :"string"     ,
+      Like_artist           :"string"     ,
+      Activity_area         :"string"     ,
+      Activity_direction_id :0            ,
+      Activity_date         :"string"     ,
+      Youtube_url           :"string"     ,
+      Soundcloud_url        :"string"     ,
+      User_url              :"string"     ,
+      Introduction          :"string"     ,
+      Last_login_date       :"string"     ,
+      Create_date           :"string"     ,
+    }
+
+    band_users = append(band_users, band_user)
+
+    c.JSON(http.StatusOK, band_users)
+  })
+  r.GET("/bandhtjs", func(c *gin.Context) {
+
+    var band_htjs []Band_htj
+    var band_htj Band_htj
+    
+    band_htj = Band_htj {
+      Band_id               : 0    ,
+      Htj_user_id           : 0    ,
+      Msg                   : "string" ,
+      Create_date           : "string" ,
+    }
+
+    band_htjs = append(band_htjs, band_htj)
+
+    c.JSON(http.StatusOK, band_htjs)
+  })
+  r.GET("/bandhtjmsgs", func(c *gin.Context) {
+
+    var band_htj_msgs []Band_htj_msg
+    var band_htj_msg Band_htj_msg
+    
+    band_htj_msg = Band_htj_msg {
+      Band_id               : 0    ,
+      Htj_user_id           : 0    ,
+      Msg_seq               : 0    ,
+      Sender_user_id        : 0    ,
+      Msg                   : "string" ,
+      Create_date           : "string" ,
+    }
+
+    band_htj_msgs = append(band_htj_msgs, band_htj_msg)
+
+    c.JSON(http.StatusOK, band_htj_msg)
+  })
   r.Run()
 }
 
