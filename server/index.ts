@@ -1,4 +1,6 @@
 import express from 'express'
+import { getMessage, setMessage } from './message'
+import bodyParser from 'body-parser';
 
 const app: express.Express = express()
 const port = 3001
@@ -11,28 +13,25 @@ const pool = mariadb.createPool({
      connectionLimit: 5
 });
 
-async function asyncFunction(res: express.Response) {
-    let conn;
-    try {
-      conn = await pool.getConnection();
-      const rows = await conn.query("SELECT 1 as val");
-      res.send(rows);  
-      
-      const result = await conn.query("INSERT INTO band_msg (band_id, msg_seq, sender_user_id, msg) VALUES (?,?,?,?);", ["3", "1","4","mariadb"]);
-      console.log(result); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
-    } catch (err) {
-      console.log(err);
-      throw err;
-    } finally {
-      if (conn) return conn.end();
-    }
-}
+//app.use(bodyParser.urlencoded({ extended: true}));
+//app.use(bodyParser.json);
+app.use(bodyParser.json());
 
 app.get('/', (req: express.Request, res: express.Response) => {
 
-    asyncFunction(res);
-})
+  // asyncFunction(res);
+});
+
+app.get('/message/', (req: express.Request, res: express.Response) => {
+
+  getMessage(res, pool);
+});
+
+app.post('/message/', (req: express.Request, res: express.Response) => {
+
+  setMessage(req, res, pool);
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
-})
+});
