@@ -9,17 +9,14 @@ import  {
     Tabs,
     Tab,
   } from '@mui/material';
+import { Message, Talk } from '../Models/Message';
+import axios from 'axios';
   
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
 };
-
-interface Talk {
-    who     : string
-    content : string
-}
 
 const TabPanel = (props: TabPanelProps) => {
     const { children, value, index, ...other } = props;
@@ -41,7 +38,7 @@ const TabPanel = (props: TabPanelProps) => {
     );
 }
   
-const MessageRoom = () => {
+const TalkRoom = () => {
     const [myTalk, setMyTalk] = useState("");
     const [talks, setTalks] = useState<Talk[]>([]);
 
@@ -51,6 +48,20 @@ const MessageRoom = () => {
 
     const handleClickSendMyTalk = () => {
         setTalks((prev) => ([...prev, {who : "", content: myTalk, }]));
+        
+        let message : Message = {
+            bandId : 0,
+            msgSeq : 1,
+            senderUserId : 2,
+            msg : myTalk
+        };
+
+        axios.post("http://localhost:3001/message/", { message })
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+        })
+
         setMyTalk("");
     }
 
@@ -104,13 +115,13 @@ const MessagePage = () => {
                     <Tab label="Band C" />
                 </Tabs>
                 <TabPanel value={pageMsg} index={0}>
-                    <MessageRoom />
+                    <TalkRoom />
                 </TabPanel>
                 <TabPanel value={pageMsg} index={1}>
-                    <MessageRoom />
+                    <TalkRoom />
                 </TabPanel>
                 <TabPanel value={pageMsg} index={2}>
-                    <MessageRoom />
+                    <TalkRoom />
                 </TabPanel>
             </Box>
         </div>

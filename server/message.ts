@@ -1,4 +1,5 @@
 import express from 'express'
+import { Message, Talk } from '../view/src/Models/Message';
 
 export async function getMessage(res: express.Response, dbPool : any) {
     let conn;
@@ -18,14 +19,14 @@ export async function getMessage(res: express.Response, dbPool : any) {
     }
 }
 
-export async function setMessage(req: express.Request, res: express.Response, dbPool : any) {
+export async function setMessage(message: Message, res: express.Response, dbPool : any) {
   let conn;
   try {
     conn = await dbPool.getConnection();
     
     const result = await conn.query(
       "INSERT INTO band_msg (band_id, msg_seq, sender_user_id, msg) VALUES (?,?,?,?);",
-      [req.body.band_id, req.body.msg_seq, req.body.sender_user_id, req.body.msg]
+      [message.bandId, message.msgSeq, message.senderUserId, message.msg]
     );
     res.send(result);
 

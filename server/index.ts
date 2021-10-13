@@ -13,6 +13,13 @@ const pool = mariadb.createPool({
      connectionLimit: 5
 });
 
+// CORSを許可する
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 //app.use(bodyParser.urlencoded({ extended: true}));
 //app.use(bodyParser.json);
 app.use(bodyParser.json());
@@ -29,7 +36,7 @@ app.get('/message/', (req: express.Request, res: express.Response) => {
 
 app.post('/message/', (req: express.Request, res: express.Response) => {
 
-  setMessage(req, res, pool);
+  setMessage(req.body.message, res, pool);
 });
 
 app.listen(port, () => {
