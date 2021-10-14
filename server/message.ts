@@ -1,5 +1,5 @@
 import express from 'express'
-import { Message, Talk } from '../view/src/Models/Message';
+import { Message } from '../view/src/Models/Message';
 
 export async function getMessage(res: express.Response, dbPool : any) {
     let conn;
@@ -7,7 +7,7 @@ export async function getMessage(res: express.Response, dbPool : any) {
       conn = await dbPool.getConnection();
       
       const rows = await conn.query(
-        "SELECT band_id, msg_seq, sender_user_id, msg FROM band_msg;"
+        "SELECT band_id AS bandId, msg_seq AS msgSeg, sender_user_id AS senderUserId, msg AS msg FROM band_msg;"
       );
       res.send(rows);
 

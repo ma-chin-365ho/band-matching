@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
     Button,
     TextField,
@@ -9,7 +9,7 @@ import  {
     Tabs,
     Tab,
   } from '@mui/material';
-import { Message, Talk } from '../Models/Message';
+import { Message } from '../Models/Message';
 import axios from 'axios';
   
 interface TabPanelProps {
@@ -37,18 +37,22 @@ const TabPanel = (props: TabPanelProps) => {
         </div>
     );
 }
-  
+
 const TalkRoom = () => {
     const [myTalk, setMyTalk] = useState("");
-    const [talks, setTalks] = useState<Talk[]>([]);
+    const [messages, setMessages] = useState<Message[]>([]);
 
-    const handleChangeMyTalk = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMyTalk(event.target.value);
+    const myUserId = 1;
+    const bandId = 2;
+
+    const fetchMessages = async () => {
+        await axios.get("http://localhost:3001/message/")
+        .then(res => {
+            setMessages(res.data as Message[]);
+        })
     };
 
-    const handleClickSendMyTalk = () => {
-        setTalks((prev) => ([...prev, {who : "", content: myTalk, }]));
-        
+    const sendMyTalk = async () => {
         let message : Message = {
             bandId : 0,
             msgSeq : 1,
@@ -56,19 +60,33 @@ const TalkRoom = () => {
             msg : myTalk
         };
 
-        axios.post("http://localhost:3001/message/", { message })
+        await axios.post("http://localhost:3001/message/", { message })
         .then(res => {
           console.log(res);
           console.log(res.data);
         })
+    }
+
+    useEffect(() => {
+        fetchMessages();
+    }, []);
+    
+    const handleChangeMyTalk = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setMyTalk(event.target.value);
+    };
+
+    const handleClickSendMyTalk = async () => {        
+        await sendMyTalk();
+
+        await fetchMessages();
 
         setMyTalk("");
     }
 
     let talkDisps :any = [];
-    talks.forEach(
-        (t : Talk) => {
-            talkDisps.push(<Typography>{t.who + " : " + t.content}</Typography>);
+    messages.forEach(
+        (m : Message) => {
+            talkDisps.push(<Typography>{m.senderUserId + " : " + m.msg}</Typography>);
         }
     );
 

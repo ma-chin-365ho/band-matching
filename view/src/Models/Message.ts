@@ -5,9 +5,4 @@ export interface Message {
     msg : string;
 };
 
-export interface Talk {
-    who     : string;
-    content : string;
-};
-
 
