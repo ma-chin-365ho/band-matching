@@ -13,18 +13,43 @@ import  {
   SelectChangeEvent,
 } from '@mui/material';
 import { BandProfile, initBandProfile } from '../Models/BandProfile';
+import axios from 'axios';
 
 const BandProfileRegister = () => {
     const [bandProfile, setBandProfile] = React.useState<BandProfile>(initBandProfile);
-  
+
+    const handleChangeOverview = (event: any) => {
+      setBandProfile((prev) => ({...prev,  overview: event.target.value}));
+    };
+    
+    const handleChangeLeaderId = (event: any) => {
+      setBandProfile((prev) => ({...prev,  leaderId: event.target.value}));
+    };
+    
+    const handleChangeMemberId = (event: any) => {
+      setBandProfile((prev) => ({...prev,  memberId : event.target.value}));
+    };
+    
     const handleChangeStatus = (event: SelectChangeEvent) => {
       setBandProfile((prev) => ({...prev,  status: Number(event.target.value)}));
     };
   
+    const handleChangeActivityArea = (event: any) => {
+      setBandProfile((prev) => ({...prev,  activityArea : event.target.value}));
+    };
+    
+    const handleChangeURL = (event: any) => {
+      setBandProfile((prev) => ({...prev,  url : event.target.value}));
+    };
+
+    const handleChangeActivityDate = (event: any) => {
+      setBandProfile((prev) => ({...prev,  memberId : event.target.value}));
+    };
+    
     const handleChangeGenre = (event: SelectChangeEvent) => {
       setBandProfile((prev) => ({...prev,  genre: Number(event.target.value)}));
     };
-  
+
     const handleChangeRecruitmentPart = (event: SelectChangeEvent) => {
       setBandProfile((prev) => ({...prev,  recruitmentPart: Number(event.target.value)}));
     };
@@ -36,11 +61,31 @@ const BandProfileRegister = () => {
     const handleChangeDirectionId = (event: SelectChangeEvent) => {
       setBandProfile((prev) => ({...prev,  directionId: Number(event.target.value)}));
     };
+
+    const handleChangeRuleLowerAge = (event: any) => {
+      setBandProfile((prev) => ({...prev,  ruleLowerAge : event.target.value}));
+    };
+  
+    const handleChangeRuleUpperAge = (event: any) => {
+      setBandProfile((prev) => ({...prev,  ruleUpperAge : event.target.value}));
+    };
+  
+    const handleChangeRuleSex = (event: any) => {
+      setBandProfile((prev) => ({...prev,  ruleSex : event.target.value}));
+    };
   
     const handleChangeIntroduction = (event: React.ChangeEvent<HTMLInputElement>) => {
       setBandProfile((prev) => ({...prev,  introduction: event.target.value}));
-    };  
-    
+    };
+
+    const handleClickBandProfileUpdate = async () => {
+      await axios.post("http://localhost:3001/bandprofile/", { bandProfile })
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+      });
+    };
+
     return (
       <div className="BandProfile">
         <TextField
@@ -48,17 +93,20 @@ const BandProfileRegister = () => {
           label="Overview"
           defaultValue=""
           variant="filled"
-        />
+          onChange={handleChangeOverview}
+          />
         <TextField
           required
           label="Leader"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeLeaderId}
         />
         <TextField
-          label="Memver"
+          label="Member"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeMemberId}
         />
         <FormControl>
           <InputLabel>Recruitment Part</InputLabel>
@@ -91,11 +139,13 @@ const BandProfileRegister = () => {
           label="ActivityArea"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeActivityArea}
         />
         <TextField
           label="URL"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeURL}
         />
         <FormControl>
           <InputLabel>Genre</InputLabel>
@@ -115,6 +165,7 @@ const BandProfileRegister = () => {
           label="ActivityDate"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeActivityDate}
         />
         <FormControlLabel
           label="Online OK"
@@ -142,17 +193,20 @@ const BandProfileRegister = () => {
           label="Rule Lower Age"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeRuleLowerAge}
         />
         <TextField
           label="Rule Upper Age"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeRuleUpperAge}
         />
         <TextField
           required
           label="Rule Sex"
           defaultValue=""
           variant="filled"
+          onChange={handleChangeRuleSex}
         />
         <TextField
           label="Introduciton"
@@ -160,7 +214,11 @@ const BandProfileRegister = () => {
           maxRows={10}
           value={bandProfile.introduction}
           onChange={handleChangeIntroduction}
-        />   
+        />
+        <Button onClick={handleClickBandProfileUpdate}
+        >
+          Update
+        </Button>
       </div>
     );
 };

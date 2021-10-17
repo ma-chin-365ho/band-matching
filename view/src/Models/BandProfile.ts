@@ -1,9 +1,3 @@
-export interface BandRule {
-    lowerAge? : number;
-    upperAge? : number;
-    sex? : number;
-};
-
 export interface BandProfile {
     id              : number;
     overview        : string;
@@ -18,14 +12,9 @@ export interface BandProfile {
     directionId     : number;
     isOnlineAllow   : boolean;
     recruitmentPart : number;
-    rule            : BandRule;
-};
-
-export const initBandRule : BandRule = 
-{
-    lowerAge : 0,
-    upperAge : 0,
-    sex : 0
+    ruleLowerAge?   : number;
+    ruleUpperAge?   : number;
+    ruleSex?        : number;
 };
 
 export const initBandProfile : BandProfile = 
@@ -43,5 +32,7 @@ export const initBandProfile : BandProfile =
     directionId     : 0,
     isOnlineAllow   : false,
     recruitmentPart : 0,
-    rule            : initBandRule,
+    ruleLowerAge    : 0,
+    ruleUpperAge    : 0,
+    ruleSex         : 0
 };

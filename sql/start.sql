@@ -12,28 +12,19 @@ create table band (
     overview              TEXT(100),                   -- 概要
     icon_id               int unsigned,                -- アイコンid
     introduction          TEXT(20000),                 -- 紹介文
-    leader_user_id        int unsigned NOT NULL,       -- リーダユーザID
-    member1_user_id       int unsigned,                -- メンバー1ユーザID
-    member2_user_id       int unsigned,                -- メンバー2ユーザID
-    member3_user_id       int unsigned,                -- メンバー3ユーザID
-    member4_user_id       int unsigned,                -- メンバー4ユーザID
-    member5_user_id       int unsigned,                -- メンバー5ユーザID
-    member6_user_id       int unsigned,                -- メンバー6ユーザID
-    member7_user_id       int unsigned,                -- メンバー7ユーザID
-    member8_user_id       int unsigned,                -- メンバー8ユーザID
-    member9_user_id       int unsigned,                -- メンバー9ユーザID
-    status_id             int unsigned,                -- ステータスID (募集中、募集停止中)
-    activity_area         TEXT(200),                   -- 活動エリア
-    activity_direction_id int unsigned,                -- 活動方向性(プロ、アマチュア)
-    activity_date         TEXT(200),                   -- 活動日程
-    online_flg            int unsigned,                -- オンライン・オフライン フラグ
-    youtube_url           TEXT(20000),                 -- youtube URL
-    soundcloud_url        TEXT(20000),                 -- soundcloud URL
-    band_url              TEXT(20000),                 -- バンド URL
+    leader_id        int unsigned NOT NULL,       -- リーダユーザID
+    member_id       int unsigned,                -- メンバー1ユーザID
+    url              TEXT(20000),                 -- バンド URL
     genre                 TEXT(200),                   -- ジャンル
-    rule_age              TEXT(10),                    -- 年齢制限
-    rule_sex              TEXT(20),                    -- 性別
+    status             int unsigned,                -- ステータスID (募集中、募集停止中)
+    activity_area         TEXT(200),                   -- 活動エリア
+    activity_date         TEXT(200),                   -- 活動日程
+    direction_id int unsigned,                -- 活動方向性(プロ、アマチュア)
+    is_online_allow            int unsigned,                -- オンライン・オフライン フラグ
     recruitment_part      TEXT(100),                   -- 募集パート
+    rule_lower_age              int unsigned,                    -- 年齢制限
+    rule_upper_age              int unsigned,                    -- 年齢制限
+    rule_sex              int unsigned,                    -- 性別
     create_date           datetime                     -- 作成日
 );
 

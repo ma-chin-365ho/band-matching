@@ -7,7 +7,7 @@ export async function getMessage(res: express.Response, dbPool : any) {
       conn = await dbPool.getConnection();
       
       const rows = await conn.query(
-        "SELECT band_id AS bandId, msg_seq AS msgSeg, sender_user_id AS senderUserId, msg AS msg FROM band_msg;"
+        "SELECT band_id AS bandId, msg_seq AS msgSeq, sender_user_id AS senderUserId, msg AS msg FROM band_msg;"
       );
       res.send(rows);
 

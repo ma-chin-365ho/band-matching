@@ -64,8 +64,8 @@ const TalkRoom = () => {
         .then(res => {
           console.log(res);
           console.log(res.data);
-        })
-    }
+        });
+    };
 
     useEffect(() => {
         fetchMessages();

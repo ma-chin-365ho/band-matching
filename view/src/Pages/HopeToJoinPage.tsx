@@ -14,7 +14,7 @@ import  {
     Select,
     SelectChangeEvent,
 } from '@mui/material';
-import { BandProfile, initBandRule } from '../Models/BandProfile';
+import { BandProfile } from '../Models/BandProfile';
 
 interface BandProfileSeach extends BandProfile {
     isUrlInputed   : boolean,
@@ -41,7 +41,9 @@ const initBandProfileSeach : BandProfileSeach =
     directionId     : 0,
     isOnlineAllow   : false,
     recruitmentPart : 0,
-    rule            : initBandRule,
+    ruleLowerAge    : 0,
+    ruleUpperAge    : 0,
+    ruleSex         : 0,
     isUrlInputed   : false,
     keyword         : "",
 };
@@ -61,7 +63,9 @@ const initBandProfileDispProps : BandProfileDispProps =
     directionId     : 0,
     isOnlineAllow   : false,
     recruitmentPart : 0,
-    rule            : initBandRule,
+    ruleLowerAge    : 0,
+    ruleUpperAge    : 0,
+    ruleSex         : 0,
     leaderName      : "",
     memberName      : "",
 };
@@ -242,9 +246,9 @@ const BandProfileDisp = (props : {data: BandProfileDispProps}) => {
         <Typography>Activity Date: {props.data.activityDate}</Typography>
         <Typography>Online OK:{props.data.isOnlineAllow}</Typography>
         <Typography>Direction:{directionName}</Typography>
-        <Typography>LowerAge: {props.data.rule.lowerAge}</Typography>
-        <Typography>UpperAge: {props.data.rule.upperAge}</Typography>
-        <Typography>Sex: {props.data.rule.sex}</Typography>
+        <Typography>LowerAge: {props.data.ruleLowerAge}</Typography>
+        <Typography>UpperAge: {props.data.ruleUpperAge}</Typography>
+        <Typography>Sex: {props.data.ruleSex}</Typography>
         <Typography>Introduction: {props.data.introduction}</Typography>
         <Button onClick={handleClickGood}
         >
