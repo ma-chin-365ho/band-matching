@@ -3,7 +3,7 @@
     "host": "localhost",
     "port": 3306,
     "username": "bmusr",
-    "password": "Canonngua44#DB",
+    "password": "*****",
     "database": "bmdb",
     "entities": [
         "dist/entities/**/*.entity.js"

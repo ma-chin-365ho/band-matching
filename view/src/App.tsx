@@ -19,6 +19,8 @@ import MessagePage from './Pages/MessagePage';
 import HopeToJoinPage from './Pages/HopeToJoinPage';
 import RecruitmentPage from './Pages/RecruitmentPage';
 import LoginPage from './Pages/LoginPage';
+import { BandProfile } from './Models/BandProfile';
+import axios from 'axios';
 
 
 const pagePersonalProfile = 0;
@@ -46,6 +48,16 @@ const Header = (props : {page : number, setPage : React.Dispatch<React.SetStateA
   const handleChangePageTab = (event: React.SyntheticEvent, newValue: number) => {
     props.setPage(newValue);
   };
+
+  const handleClickMessage = async () => {
+    await axios.get("http://localhost:3001/bandprofile/")
+    .then(res => {
+      // context provider
+      // res.data as BandProfile[];
+      
+    })
+    
+  };
   
   return (
     <>
@@ -59,7 +71,7 @@ const Header = (props : {page : number, setPage : React.Dispatch<React.SetStateA
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={props.page} onChange={handleChangePageTab} aria-label="basic tabs example">
         　<Tab label="Recruitment" value={pageRecruitment} />
-          <Tab label="Message" value={pageMessage} />
+          <Tab label="Message" value={pageMessage} onClick={handleClickMessage}/>
           <Tab label="HopeToJoin" value={pageHopeToJoin} />
           <Tab label="Profile" value={pagePersonalProfile} />
           <Tab label="Band" value={pageBandProfile} />

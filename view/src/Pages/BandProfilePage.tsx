@@ -79,7 +79,7 @@ const BandProfileRegister = () => {
     };
 
     const handleClickBandProfileUpdate = async () => {
-      await axios.post("http://localhost:3001/bandprofile/", { bandProfile })
+      await axios.post("http://localhost:3001/band-profile/", { ...bandProfile })
         .then(res => {
           console.log(res);
           console.log(res.data);
