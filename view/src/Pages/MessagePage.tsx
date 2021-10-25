@@ -60,7 +60,7 @@ const TalkRoom = () => {
             msg : myTalk
         };
 
-        await axios.post("http://localhost:3001/message/", { message })
+        await axios.post("http://localhost:3001/message/", { ...message })
         .then(res => {
           console.log(res);
           console.log(res.data);

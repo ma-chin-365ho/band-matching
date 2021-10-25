@@ -1,5 +1,5 @@
 export interface Message {
-    bandId : number;
+    bandId : number | null;
     msgSeq : number;
     senderUserId : number;
     msg : string;
