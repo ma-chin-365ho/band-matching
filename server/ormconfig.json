@@ -1,0 +1,16 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "bmusr",
+    "password": "Canonngua44#DB",
+    "database": "bmdb",
+    "entities": [
+        "dist/entities/**/*.entity.js"
+    ],
+    "migrations": [
+        "dist/migrations/**/*.js"
+    ],
+    "autoLoadEntities": true,
+    "synchronize": true
+}
