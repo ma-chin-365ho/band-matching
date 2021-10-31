@@ -15,6 +15,10 @@ export class PersonalProfileService {
         return this.personalProfileRepository.find();
     }
 
+    async findOneByLoginId(loginId: string): Promise<PersonalProfile | undefined> {
+        return this.personalProfileRepository.findOne({loginId: loginId});
+    }
+    
     addPersonalProfile(data: any) : Promise<InsertResult> {
         return this.personalProfileRepository.insert(data);
     }

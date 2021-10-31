@@ -9,6 +9,9 @@ export class PersonalProfile {
     loginId       : string;
 
     @Column()
+    password      : string;
+
+    @Column()
     name          : string;
 
     @Column()

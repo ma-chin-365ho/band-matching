@@ -16,7 +16,7 @@ import { BandProfile, initBandProfile } from '../Models/BandProfile';
 import axios from 'axios';
 
 const BandProfileRegister = ( props : {bandProfile : BandProfile} ) => {
-    const [bandProfile, setBandProfile] = React.useState<BandProfile>(initBandProfile);
+    const [bandProfile, setBandProfile] = useState<BandProfile>(initBandProfile);
 
     useEffect(() => {
       setBandProfile(props.bandProfile);
