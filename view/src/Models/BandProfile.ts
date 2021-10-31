@@ -17,6 +17,11 @@ export interface BandProfile {
     ruleSex?        : number;
 };
 
+export interface BandProfileDisp extends BandProfile {
+    leaderName     : string;
+    memberName     : string;
+}
+
 export const initBandProfile : BandProfile = 
 {
     id              : null,

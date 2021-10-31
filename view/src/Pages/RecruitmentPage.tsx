@@ -15,14 +15,11 @@ import  {
   SelectChangeEvent,
 } from '@mui/material';
 import { PersonalProfile } from '../Models/PersonalProfile';
+import axios from 'axios';
 
 interface PersonalProfileSeach extends PersonalProfile {
   isUrlInputed   : boolean,
   keyword        : string,
-}
-
-interface PersonalProfileDispProps extends PersonalProfile {
-
 }
 
 const initPersonalProfileSeach : PersonalProfileSeach = 
@@ -42,25 +39,27 @@ const initPersonalProfileSeach : PersonalProfileSeach =
   keyword       : "",
 };
 
-const initPersonalProfileDispProps : PersonalProfileDispProps = 
-{
-  id            : 0,
-  loginId       : "",
-  name          : "",
-  part          : 0,
-  url           : "",
-  genre         : 0,
-  likeArtist    : "",
-  isOnlineAllow : false,
-  isHopeToJoin  : false,
-  directionId   : 0,
-  introduction  : "",
-};
+const PersonalProfileSeachField = (props : {setPersonalProfiles : any}) => {
+  const [personalProfileSeach, setPersonalProfileSeach] = useState<PersonalProfileSeach>(initPersonalProfileSeach);
 
-const dummyPersonalProfileDispProps : PersonalProfileDispProps[] =[initPersonalProfileDispProps, initPersonalProfileDispProps, initPersonalProfileDispProps, initPersonalProfileDispProps, initPersonalProfileDispProps, initPersonalProfileDispProps, initPersonalProfileDispProps];
+  const fetchPersonalProfile = async () => {
+    await axios.get("http://localhost:3001/personal-profile/")
+    .then(res => {
+      props.setPersonalProfiles(res.data as PersonalProfile[]);
+    })
+  };
 
-const PersonalProfileSeachField = () => {
-  const [personalProfileSeach, setPersonalProfileSeach] = React.useState<PersonalProfileSeach>(initPersonalProfileSeach);
+  const handleChangeLoginId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfileSeach((prev) => ({...prev,  loginId: event.target.value}));
+  };
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfileSeach((prev) => ({...prev,  name: event.target.value}));
+  };
+
+  const handleChangeUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfileSeach((prev) => ({...prev,  url: event.target.value}));
+  };
 
   const handleChangePart = (event: SelectChangeEvent) => {
     setPersonalProfileSeach((prev) => ({...prev,  part: Number(event.target.value)}));
@@ -72,6 +71,14 @@ const PersonalProfileSeachField = () => {
 
   const handleChangeLikeArtist = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPersonalProfileSeach((prev) => ({...prev,  likeArtist: event.target.value}));
+  };
+
+  const handleChangeActivityArea = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfileSeach((prev) => ({...prev,  activityArea: event.target.value}));
+  };
+
+  const handleChangeActivityDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfileSeach((prev) => ({...prev,  activityDate: event.target.value}));
   };
 
   const handleChangeIsOnlineAllow = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,8 +101,8 @@ const PersonalProfileSeachField = () => {
     setPersonalProfileSeach((prev) => ({...prev,  keyword: event.target.value}));
   };
 
-  const handleClickSeachBand = () => {
-
+  const handleClickSeachPerson = () => {
+    fetchPersonalProfile();
   }
 
   return (
@@ -104,12 +111,16 @@ const PersonalProfileSeachField = () => {
         required
         label="Login ID"
         defaultValue=""
+        value={personalProfileSeach.loginId}
+        onChange={handleChangeLoginId}
         variant="filled"
       />
       <TextField
         required
         label="Name"
         defaultValue=""
+        value={personalProfileSeach.name}
+        onChange={handleChangeName}
         variant="filled"
       />
       <FormControl>
@@ -129,6 +140,8 @@ const PersonalProfileSeachField = () => {
       <TextField
         label="URL"
         defaultValue=""
+        value={personalProfileSeach.url}
+        onChange={handleChangeUrl}
         variant="filled"
       />
       <FormControlLabel
@@ -158,17 +171,22 @@ const PersonalProfileSeachField = () => {
       <TextField
         label="Like Artist"
         defaultValue=""
+        value={personalProfileSeach.likeArtist}
         onChange={handleChangeLikeArtist}
         variant="filled"
       />
       <TextField
         label="ActivityArea"
         defaultValue=""
+        value={personalProfileSeach.activityArea}
+        onChange={handleChangeActivityArea}
         variant="filled"
       />
       <TextField
         label="ActivityDate"
         defaultValue=""
+        value={personalProfileSeach.activityDate}
+        onChange={handleChangeActivityDate}
         variant="filled"
       />
       <FormControlLabel
@@ -208,7 +226,7 @@ const PersonalProfileSeachField = () => {
         value={personalProfileSeach.keyword}
         onChange={handleChangeKeyword}
       />
-      <Button onClick={handleClickSeachBand}
+      <Button onClick={handleClickSeachPerson}
       >
         検索
       </Button>
@@ -216,11 +234,11 @@ const PersonalProfileSeachField = () => {
   );  
 };
 
-const PersonalProfileDisp = (props : {data: PersonalProfileDispProps}) => {
+const PersonalProfileDisp = (props : {personalProfile: PersonalProfile}) => {
 
-  const partName = props.data.part;
-  const genreName = props.data.genre;
-  const directionName = props.data.directionId;
+  const partName = props.personalProfile.part;
+  const genreName = props.personalProfile.genre;
+  const directionName = props.personalProfile.directionId;
 
   const handleClickGood = () => {
 
@@ -228,18 +246,18 @@ const PersonalProfileDisp = (props : {data: PersonalProfileDispProps}) => {
 
   return (
     <div className="BandProfileDisp">
-      <Typography>loginId:{props.data.loginId}</Typography>
-      <Typography>name:{props.data.name}</Typography>
+      <Typography>loginId:{props.personalProfile.loginId}</Typography>
+      <Typography>name:{props.personalProfile.name}</Typography>
       <Typography>part:{partName}</Typography>
-      <Typography>URL:{props.data.url}</Typography>
+      <Typography>URL:{props.personalProfile.url}</Typography>
       <Typography>Genre:{genreName}</Typography>
-      <Typography>likeArtist:{props.data.likeArtist}</Typography>
-      <Typography>ActivityArea: {props.data.activityArea}</Typography>
-      <Typography>Activity Date: {props.data.activityDate}</Typography>
-      <Typography>Online OK:{props.data.isOnlineAllow}</Typography>
-      <Typography>Hope To Join:{props.data.isHopeToJoin}</Typography>
+      <Typography>likeArtist:{props.personalProfile.likeArtist}</Typography>
+      <Typography>ActivityArea: {props.personalProfile.activityArea}</Typography>
+      <Typography>Activity Date: {props.personalProfile.activityDate}</Typography>
+      <Typography>Online OK:{props.personalProfile.isOnlineAllow}</Typography>
+      <Typography>Hope To Join:{props.personalProfile.isHopeToJoin}</Typography>
       <Typography>Direction:{directionName}</Typography>
-      <Typography>Introduction:{props.data.introduction}</Typography>
+      <Typography>Introduction:{props.personalProfile.introduction}</Typography>
       <Button onClick={handleClickGood}
       >
         いいね。
@@ -248,34 +266,20 @@ const PersonalProfileDisp = (props : {data: PersonalProfileDispProps}) => {
   );
 };
 
-const PersonalProfileDisps = () => {
-
-  let personalProfileDisps :any = [];
-  dummyPersonalProfileDispProps.forEach(
-      (b : PersonalProfileDispProps) => {
-          personalProfileDisps.push(
-              <Grid item xs={3}>
-                  <PersonalProfileDisp data={b} />
-              </Grid>
-          );
-      }
-  );
-
-  return (
-      <div className="PersonalProfileDisps">
-          <Grid container spacing={2}>                
-              {personalProfileDisps}
-          </Grid>
-      </div>
-  );  
-};
-
 const RecruitmentPage = () => {
+  const [personalProfiles, setPersonalProfiles] = useState<PersonalProfile[]>([]);  
+
   return (
     <div className="Recruitment">
       Recruitment
-      <PersonalProfileSeachField />
-      <PersonalProfileDisps />      
+      <PersonalProfileSeachField setPersonalProfiles={setPersonalProfiles} />
+      <Grid container spacing={2}>                
+        {personalProfiles.map((p) => 
+          <Grid item xs={3}>
+            <PersonalProfileDisp personalProfile={p} />
+          </Grid>
+        )}
+      </Grid>
     </div>
   );
 }

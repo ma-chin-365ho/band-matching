@@ -14,16 +14,12 @@ import  {
     Select,
     SelectChangeEvent,
 } from '@mui/material';
-import { BandProfile } from '../Models/BandProfile';
+import { BandProfile, BandProfileDisp } from '../Models/BandProfile';
+import axios from 'axios';
 
 interface BandProfileSeach extends BandProfile {
     isUrlInputed   : boolean,
     keyword        : string,
-}
-
-interface BandProfileDispProps extends BandProfile {
-    leaderName     : string,
-    memberName     : string,
 }
 
 const initBandProfileSeach : BandProfileSeach = 
@@ -48,33 +44,16 @@ const initBandProfileSeach : BandProfileSeach =
     keyword         : "",
 };
 
-const initBandProfileDispProps : BandProfileDispProps = 
-{
-    id              : 0,
-    overview        : "",
-    introduction    : "",
-    leaderId        : 0,
-    memberId        : [],
-    url             : "",
-    genre           : 0,
-    status          : 0,
-    activityArea    : "",
-    activityDate    : "",
-    directionId     : 0,
-    isOnlineAllow   : false,
-    recruitmentPart : 0,
-    ruleLowerAge    : 0,
-    ruleUpperAge    : 0,
-    ruleSex         : 0,
-    leaderName      : "",
-    memberName      : "",
-};
+const BandProfileSeachField = (props : {setBandProfileDisps : any}) => {
+    const [bandProfileSeach, setBandProfileSeach] = useState<BandProfileSeach>(initBandProfileSeach);
 
-const dummyBandProfileDispProps : BandProfileDispProps[] =[initBandProfileDispProps, initBandProfileDispProps, initBandProfileDispProps, initBandProfileDispProps, initBandProfileDispProps, initBandProfileDispProps, initBandProfileDispProps];
-
-const BandProfileSeachField = () => {
-    const [bandProfileSeach, setBandProfileSeach] = React.useState<BandProfileSeach>(initBandProfileSeach);
-  
+    const fetchBandProfile = async () => {
+      await axios.get("http://localhost:3001/band-profile/")
+      .then(res => {
+        props.setBandProfileDisps(res.data as BandProfileDisp[]);
+      })
+    };
+    
     const handleChangeStatus = (event: SelectChangeEvent) => {
       setBandProfileSeach((prev) => ({...prev,  status: Number(event.target.value)}));
     };
@@ -83,6 +62,14 @@ const BandProfileSeachField = () => {
       setBandProfileSeach((prev) => ({...prev,  genre: Number(event.target.value)}));
     };
   
+    const handleChangeActivityArea = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBandProfileSeach((prev) => ({...prev,  activityArea: event.target.value}));
+    };
+  
+    const handleChangeActivityDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBandProfileSeach((prev) => ({...prev,  activityDate: event.target.value}));
+    };
+    
     const handleChangeRecruitmentPart = (event: SelectChangeEvent) => {
       setBandProfileSeach((prev) => ({...prev,  recruitmentPart: Number(event.target.value)}));
     };
@@ -102,9 +89,21 @@ const BandProfileSeachField = () => {
     const handleChangeKeyword = (event: React.ChangeEvent<HTMLInputElement>) => {
       setBandProfileSeach((prev) => ({...prev,  keyword: event.target.value}));
     };
+    
+    const handleChangeRuleLowerAge = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBandProfileSeach((prev) => ({...prev,  ruleLowerAge: Number(event.target.value)}));
+    };
+    
+    const handleChangeRuleUpperAge = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBandProfileSeach((prev) => ({...prev,  ruleUpperAge: Number(event.target.value)}));
+    };
+    
+    const handleChangeRuleSex = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setBandProfileSeach((prev) => ({...prev,  ruleSex: Number(event.target.value)}));
+    };
 
     const handleClickSeachBand = () => {
-
+      fetchBandProfile();
     }
     
     return (
@@ -140,7 +139,9 @@ const BandProfileSeachField = () => {
         <TextField
           label="ActivityArea"
           defaultValue=""
-          variant="filled"
+          value={bandProfileSeach.activityArea}
+          onChange={handleChangeActivityArea}
+        variant="filled"
         />
         <FormControl>
           <InputLabel>Genre</InputLabel>
@@ -159,6 +160,8 @@ const BandProfileSeachField = () => {
         <TextField
           label="ActivityDate"
           defaultValue=""
+          value={bandProfileSeach.activityDate}
+          onChange={handleChangeActivityDate}
           variant="filled"
         />
         <FormControlLabel
@@ -186,17 +189,23 @@ const BandProfileSeachField = () => {
         <TextField
           label="Rule Lower Age"
           defaultValue=""
+          value={bandProfileSeach.ruleLowerAge}
+          onChange={handleChangeRuleLowerAge}
           variant="filled"
         />
         <TextField
           label="Rule Upper Age"
           defaultValue=""
+          value={bandProfileSeach.ruleUpperAge}
+          onChange={handleChangeRuleUpperAge}
           variant="filled"
         />
         <TextField
           required
           label="Rule Sex"
           defaultValue=""
+          value={bandProfileSeach.ruleSex}
+          onChange={handleChangeRuleSex}
           variant="filled"
         />
         <FormControlLabel
@@ -222,7 +231,7 @@ const BandProfileSeachField = () => {
     );
 };
   
-const BandProfileDisp = (props : {data: BandProfileDispProps}) => {
+const BandProfileDispCell = (props : {data: BandProfileDisp}) => {
 
     const partName = props.data.recruitmentPart;
     const statusName = props.data.status;
@@ -258,34 +267,19 @@ const BandProfileDisp = (props : {data: BandProfileDispProps}) => {
     );
 };
 
-const BandProfileDisps = () => {
-
-    let bandProfileDisps :any = [];
-    dummyBandProfileDispProps.forEach(
-        (b : BandProfileDispProps) => {
-            bandProfileDisps.push(
-                <Grid item xs={3}>
-                    <BandProfileDisp data={b} />
-                </Grid>
-            );
-        }
-    );
-
-    return (
-        <div className="BandProfileDisps">
-            <Grid container spacing={2}>                
-                {bandProfileDisps}
-            </Grid>
-        </div>
-    );  
-};
-
-
 const HopeToJoinPage = () => {
+  const [bandProfileDisps, setBandProfileDisps] = useState<BandProfileDisp[]>([]);  
+
   return (
     <div className="HopeToJoin">
-      <BandProfileSeachField />
-      <BandProfileDisps />
+      <BandProfileSeachField setBandProfileDisps={setBandProfileDisps} />
+      <Grid container spacing={2}>                
+        {bandProfileDisps.map((bpd) => 
+          <Grid item xs={3}>
+            <BandProfileDispCell data={bpd} />
+          </Grid>
+        )}
+      </Grid>
     </div>
   );
 }
