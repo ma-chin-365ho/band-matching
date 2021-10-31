@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
+  Button,
   FormControl,
   InputLabel,
   TextField,
@@ -12,12 +13,35 @@ import  {
   SelectChangeEvent,
 } from '@mui/material';
 import { PersonalProfile, initPersonalProfile } from '../Models/PersonalProfile';
-
-
+import axios from 'axios';
 
 const PersonalProfilePage = () => 
 {
-  const [personalProfile, setPersonalProfile] = React.useState<PersonalProfile>(initPersonalProfile);
+  const [personalProfile, setPersonalProfile] = useState<PersonalProfile>(initPersonalProfile);
+
+  const fetchPersonalProfile = async () => {
+    await axios.get("http://localhost:3001/personal-profile/")
+    .then(res => {
+      const resPersonalProfile : PersonalProfile[] = res.data as PersonalProfile[];
+      setPersonalProfile(resPersonalProfile[0]);
+    })
+  };
+
+  useEffect(() => {
+    fetchPersonalProfile();
+  }, []);
+
+  const handleChangeLoginId = (event :React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfile((prev) => ({...prev,  loginId: event.target.value}));
+  };
+
+  const handleChangeName = (event :React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfile((prev) => ({...prev,  name: event.target.value}));
+  };
+
+  const handleChangeUrl = (event :React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfile((prev) => ({...prev,  url: event.target.value}));
+  };
 
   const handleChangePart = (event: SelectChangeEvent) => {
     setPersonalProfile((prev) => ({...prev,  part: Number(event.target.value)}));
@@ -29,6 +53,14 @@ const PersonalProfilePage = () =>
 
   const handleChangeLikeArtist = (event :React.ChangeEvent<HTMLInputElement>) => {
     setPersonalProfile((prev) => ({...prev,  likeArtist: event.target.value}));
+  };
+
+  const handleChangeActivityArea = (event :React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfile((prev) => ({...prev,  activityArea: event.target.value}));
+  };
+
+  const handleChangeActivityDate = (event :React.ChangeEvent<HTMLInputElement>) => {
+    setPersonalProfile((prev) => ({...prev,  activityDate: event.target.value}));
   };
 
   const handleChangeIsOnlineAllow = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,20 +78,31 @@ const PersonalProfilePage = () =>
   const handleChangeIsHopeToJoin = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPersonalProfile((prev) => ({...prev,  isHopeToJoin: event.target.checked}));
   };
-  
-  
+
+  const handleClickPersonalProfileUpdate = async () => {
+    await axios.post("http://localhost:3001/personal-profile/", { ...personalProfile })
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+    });
+  };
+
   return (
     <div className="PersonalProfile">
       <TextField
         required
         label="Login ID"
         defaultValue=""
+        value={personalProfile.loginId}
+        onChange={handleChangeLoginId}
         variant="filled"
       />
       <TextField
         required
         label="Name"
         defaultValue=""
+        value={personalProfile.name}
+        onChange={handleChangeName}
         variant="filled"
       />
       <FormControl>
@@ -79,6 +122,8 @@ const PersonalProfilePage = () =>
       <TextField
         label="URL"
         defaultValue=""
+        value={personalProfile.url}
+        onChange={handleChangeUrl}
         variant="filled"
       />
       <FormControl>
@@ -98,17 +143,22 @@ const PersonalProfilePage = () =>
       <TextField
         label="Like Artist"
         defaultValue=""
+        value={personalProfile.likeArtist}
         onChange={handleChangeLikeArtist}
         variant="filled"
       />
       <TextField
         label="ActivityArea"
         defaultValue=""
+        value={personalProfile.activityArea}
+        onChange={handleChangeActivityArea}
         variant="filled"
       />
       <TextField
         label="ActivityDate"
         defaultValue=""
+        value={personalProfile.activityDate}
+        onChange={handleChangeActivityDate}
         variant="filled"
       />
       <FormControlLabel
@@ -150,6 +200,10 @@ const PersonalProfilePage = () =>
         value={personalProfile.introduction}
         onChange={handleChangeIntroduction}
       />   
+      <Button onClick={handleClickPersonalProfileUpdate}
+      >
+        Update
+      </Button>
     </div>
   );
 };

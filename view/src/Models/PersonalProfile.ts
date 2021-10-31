@@ -1,5 +1,5 @@
 export interface PersonalProfile {
-    id            : number;
+    id            : number | null;
     loginId       : string;
     name          : string;
     part          : number;
@@ -16,7 +16,7 @@ export interface PersonalProfile {
 
 export const initPersonalProfile : PersonalProfile = 
 {
-  id: 0,
+  id: null,
   loginId: "",
   name: "",
   part: 0,

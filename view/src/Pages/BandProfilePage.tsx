@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { 
   Button,
   FormControl,
@@ -15,9 +15,13 @@ import  {
 import { BandProfile, initBandProfile } from '../Models/BandProfile';
 import axios from 'axios';
 
-const BandProfileRegister = () => {
+const BandProfileRegister = ( props : {bandProfile : BandProfile} ) => {
     const [bandProfile, setBandProfile] = React.useState<BandProfile>(initBandProfile);
 
+    useEffect(() => {
+      setBandProfile(props.bandProfile);
+    }, [props.bandProfile]);
+  
     const handleChangeOverview = (event: any) => {
       setBandProfile((prev) => ({...prev,  overview: event.target.value}));
     };
@@ -43,7 +47,7 @@ const BandProfileRegister = () => {
     };
 
     const handleChangeActivityDate = (event: any) => {
-      setBandProfile((prev) => ({...prev,  memberId : event.target.value}));
+      setBandProfile((prev) => ({...prev,  activityDate : event.target.value}));
     };
     
     const handleChangeGenre = (event: SelectChangeEvent) => {
@@ -79,6 +83,7 @@ const BandProfileRegister = () => {
     };
 
     const handleClickBandProfileUpdate = async () => {
+
       await axios.post("http://localhost:3001/band-profile/", { ...bandProfile })
         .then(res => {
           console.log(res);
@@ -93,6 +98,7 @@ const BandProfileRegister = () => {
           label="Overview"
           defaultValue=""
           variant="filled"
+          value={bandProfile.overview}
           onChange={handleChangeOverview}
           />
         <TextField
@@ -100,12 +106,14 @@ const BandProfileRegister = () => {
           label="Leader"
           defaultValue=""
           variant="filled"
+          value={bandProfile.leaderId}
           onChange={handleChangeLeaderId}
         />
         <TextField
           label="Member"
           defaultValue=""
           variant="filled"
+          value={bandProfile.memberId}
           onChange={handleChangeMemberId}
         />
         <FormControl>
@@ -139,12 +147,14 @@ const BandProfileRegister = () => {
           label="ActivityArea"
           defaultValue=""
           variant="filled"
+          value={bandProfile.activityArea}
           onChange={handleChangeActivityArea}
         />
         <TextField
           label="URL"
           defaultValue=""
           variant="filled"
+          value={bandProfile.url}
           onChange={handleChangeURL}
         />
         <FormControl>
@@ -165,6 +175,7 @@ const BandProfileRegister = () => {
           label="ActivityDate"
           defaultValue=""
           variant="filled"
+          value={bandProfile.activityDate}
           onChange={handleChangeActivityDate}
         />
         <FormControlLabel
@@ -193,12 +204,14 @@ const BandProfileRegister = () => {
           label="Rule Lower Age"
           defaultValue=""
           variant="filled"
+          value={bandProfile.ruleLowerAge}
           onChange={handleChangeRuleLowerAge}
         />
         <TextField
           label="Rule Upper Age"
           defaultValue=""
           variant="filled"
+          value={bandProfile.ruleUpperAge}
           onChange={handleChangeRuleUpperAge}
         />
         <TextField
@@ -206,6 +219,7 @@ const BandProfileRegister = () => {
           label="Rule Sex"
           defaultValue=""
           variant="filled"
+          value={bandProfile.ruleSex}
           onChange={handleChangeRuleSex}
         />
         <TextField
@@ -226,22 +240,24 @@ const BandProfileRegister = () => {
 const BandProfilesPage = () => {
     const [bands, setBands] = useState<BandProfile[]>([]);
   
-    let bandProfileDisps :any = [];
+    const fetchBandProfile = async () => {
+      await axios.get("http://localhost:3001/band-profile/")
+      .then(res => {
+        setBands(res.data as BandProfile[]);
+      })
+    };
+  
+    useEffect(() => {
+      fetchBandProfile();
+    }, []);
   
     const handleClickBandProfileAdd = () => {
       setBands((prev) => ([...prev, initBandProfile]));
-  
     }
-  
-    bands.forEach(
-      (b : BandProfile) => {
-        bandProfileDisps.push(<BandProfileRegister />);
-      }
-    );
-  
+
     return (
       <>
-        {bandProfileDisps}
+        {bands.map((b) => <BandProfileRegister bandProfile={b} />)}
         <Button onClick={handleClickBandProfileAdd}
         >
           Add...

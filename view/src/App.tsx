@@ -50,12 +50,12 @@ const Header = (props : {page : number, setPage : React.Dispatch<React.SetStateA
   };
 
   const handleClickMessage = async () => {
-    await axios.get("http://localhost:3001/bandprofile/")
-    .then(res => {
+    // await axios.get("http://localhost:3001/band-profile/")
+    // .then(res => {
       // context provider
       // res.data as BandProfile[];
       
-    })
+    // })
     
   };
   

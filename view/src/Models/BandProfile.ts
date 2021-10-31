@@ -1,5 +1,5 @@
 export interface BandProfile {
-    id              : number;
+    id              : number | null;
     overview        : string;
     introduction    : string;
     leaderId        : number;
@@ -19,7 +19,7 @@ export interface BandProfile {
 
 export const initBandProfile : BandProfile = 
 {
-    id              : 0,
+    id              : null,
     overview        : "",
     introduction    : "",
     leaderId        : 0,
