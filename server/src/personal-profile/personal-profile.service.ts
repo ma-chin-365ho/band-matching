@@ -16,7 +16,7 @@ export class PersonalProfileService {
     }
 
     async findOneByLoginId(loginId: string): Promise<PersonalProfile | undefined> {
-        return this.personalProfileRepository.findOne({loginId: loginId});
+        return this.personalProfileRepository.findOne({where:{loginId: loginId}});
     }
     
     addPersonalProfile(data: any) : Promise<InsertResult> {

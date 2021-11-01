@@ -18,8 +18,7 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // FIXME: サンプルは@UseGuards(LocalAuthGuard)付けるようになってるが付けるとauth/loginで必ずAuthErrorなる。
-  //@UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req);

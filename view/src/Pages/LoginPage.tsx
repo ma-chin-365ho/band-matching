@@ -6,12 +6,12 @@ import {
 import axios from 'axios';
 
 interface Login {
-  loginId : string;
+  username : string;
   password : string;
 };
 
 const initLogin : Login =  {
-  loginId : "",
+  username : "",
   password : ""
 }
 
@@ -20,7 +20,7 @@ const LoginPage = () => {
   const [login, setLogin] = useState<Login>(initLogin);
 
   const handleChangeLoginId = (event :React.ChangeEvent<HTMLInputElement>) => {
-    setLogin((prev) => ({...prev,  loginId: event.target.value}));
+    setLogin((prev) => ({...prev,  username: event.target.value}));
   };
 
   const handleChangeLoginPassword = (event :React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +42,7 @@ const LoginPage = () => {
         required
         label="Login ID"
         defaultValue=""
-        value={login.loginId}
+        value={login.username}
         onChange={handleChangeLoginId}
         variant="filled"
       />
